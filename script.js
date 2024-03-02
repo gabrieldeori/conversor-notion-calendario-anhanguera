@@ -103,3 +103,30 @@ const objetoDePrazos = blocos.map((bloco, index) => {
 });
 
 console.log(objetoDePrazos);
+
+let csvContent = "Tipo,Disciplina,Módulo,Prazo,Fuso Horário\n";
+
+objetoDePrazos.forEach(item => {
+    if (item !== null) {
+        let row = `${item.type},${item.course},${item.module},${item.initialDate} ${item.initialHour} → ${item.dueDate} ${item.dueHour},${item.timezone},\n`;
+        csvContent += row;
+    }
+});
+
+console.log(csvContent);
+
+let blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+
+let url = URL.createObjectURL(blob);
+
+let button = document.createElement("button");
+button.innerHTML = 'Download CSV';
+button.addEventListener('click', function(e) {
+    let link = document.createElement('a');
+    link.href = url;
+    link.download = "prazos.csv";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+});
+document.body.appendChild(button);
